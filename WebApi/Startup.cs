@@ -1,5 +1,4 @@
 using BLL.Services;
-using Common.Validators;
 using DAL;
 using DAL.Repositories;
 using DAL.UnitOfWork;
@@ -12,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using PL.Validators;
 
 namespace WebApi
 {

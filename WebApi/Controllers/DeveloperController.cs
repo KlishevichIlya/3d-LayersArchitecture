@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
+using BLL.Interfaces;
 using Common.DTO;
-using Common.Entities;
+
 using DAL.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,13 +12,12 @@ namespace WebApi.Controllers
     [ApiController]
     public class DeveloperController : ControllerBase
     {       
-        private readonly IDeveloperRepository _developerRepository;
-        private readonly IMapper _mapper;
+        private readonly IDeveloperService _developerServices;
+       
 
-        public DeveloperController(IDeveloperRepository developerRepository, IMapper mapper)
-        {            
-            _developerRepository = developerRepository;
-            _mapper = mapper;
+        public DeveloperController(IDeveloperService developerServices)
+        {
+            _developerServices = developerServices;            
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace WebApi.Controllers
         [Route("popular")]
         public IActionResult GetPopularDevelopers([FromQuery] int count)
         {
-            var popularDevelopers = _developerRepository.GerPopularDevelopers(count);
+            var popularDevelopers = _developerServices.GerPopularDevelopers(count);
             return Ok(popularDevelopers);
         }
         
@@ -43,10 +43,9 @@ namespace WebApi.Controllers
         public IActionResult AddNewDeveloper(DeveloperDTO developerDTO)
         {
             if (ModelState.IsValid)
-            {              
-                var developer = _mapper.Map<DeveloperDTO, Developer>(developerDTO);
-                _developerRepository.Add(developer);
-                return Ok(developer);
+            {
+                _developerServices.Add(developerDTO);
+                return Ok(developerDTO);
             }
             return BadRequest();
         }
@@ -60,10 +59,10 @@ namespace WebApi.Controllers
         [Route("delete/developer")]
         public IActionResult RemoveCurrentDeveloper(int id)
         {           
-            var developer = _developerRepository.GetById(id);
+            var developer = _developerServices.GetById(id);
             if (developer == null)
                 throw new ArgumentException($"User with Id = {id} not found");
-            _developerRepository.Remove(developer);
+            _developerServices.Remove(developer);
             return Ok();            
         }
 
@@ -76,7 +75,7 @@ namespace WebApi.Controllers
         [Route("/user/id")]
         public IActionResult GetUserById(int id)
         {
-            var developer = _developerRepository.GetById(id);
+            var developer = _developerServices.GetById(id);
             if (developer == null)
                 throw new ArgumentException($"User with Id = {id} not found");
             return Ok(developer);
