@@ -4,14 +4,16 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20210604113840_EmptyMigration")]
+    partial class EmptyMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,7 +31,7 @@ namespace DAL.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CurrentProjectId")
+                    b.Property<int>("CurrentProjectId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateOfBirthday")
@@ -84,60 +86,20 @@ namespace DAL.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("Common.Entities.WorkHistory", b =>
-                {
-                    b.Property<int>("PreviousDeveloperId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PreviousProjectId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PreviousDeveloperId", "PreviousProjectId");
-
-                    b.HasIndex("PreviousProjectId");
-
-                    b.ToTable("WorkHistory");
-                });
-
             modelBuilder.Entity("Common.Entities.Developer", b =>
                 {
                     b.HasOne("Common.Entities.Project", "CurrentProject")
                         .WithMany("CurrentDevelopers")
                         .HasForeignKey("CurrentProjectId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CurrentProject");
-                });
-
-            modelBuilder.Entity("Common.Entities.WorkHistory", b =>
-                {
-                    b.HasOne("Common.Entities.Developer", "Developer")
-                        .WithMany("PreviousProjects")
-                        .HasForeignKey("PreviousDeveloperId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Common.Entities.Project", "Project")
-                        .WithMany("PreviousDevelopers")
-                        .HasForeignKey("PreviousProjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Developer");
-
-                    b.Navigation("Project");
-                });
-
-            modelBuilder.Entity("Common.Entities.Developer", b =>
-                {
-                    b.Navigation("PreviousProjects");
                 });
 
             modelBuilder.Entity("Common.Entities.Project", b =>
                 {
                     b.Navigation("CurrentDevelopers");
-
-                    b.Navigation("PreviousDevelopers");
                 });
 #pragma warning restore 612, 618
         }

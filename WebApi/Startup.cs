@@ -1,6 +1,10 @@
-using DataAccess.EFCore;
+using BLL.Services;
+using Common.Validators;
+using DAL;
+using DAL.Repositories;
+using DAL.UnitOfWork;
 using DataAccess.EFCore.UnitOfWork;
-using Domain.Interfaces;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +24,7 @@ namespace WebApi
 
         public IConfiguration Configuration { get; }
 
+       
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationContext>(options =>
@@ -27,8 +32,13 @@ namespace WebApi
                     Configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(ApplicationContext).Assembly.FullName)));
             services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddControllers();
-            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi", Version = "v1" }); });
+            services.AddTransient<IProjectRepository, ProjectService>();
+            services.AddTransient<IDeveloperRepository, DeveloperService>();
+            services.AddAutoMapper(typeof(Startup));
+            services.AddControllers().AddFluentValidation(fv => {                
+                fv.RegisterValidatorsFromAssemblyContaining<DeveloperDTOValidator>(); // Scoped
+            });          
+            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "PL", Version = "v1" }); });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -37,7 +47,7 @@ namespace WebApi
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Presentation layer v1"));
             }
 
             app.UseHttpsRedirection();

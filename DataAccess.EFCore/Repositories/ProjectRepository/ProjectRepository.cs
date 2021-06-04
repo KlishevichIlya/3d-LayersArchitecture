@@ -1,7 +1,6 @@
-﻿using Domain.Entities;
-using Domain.Interfaces;
+﻿using Common.Entities;
 
-namespace DataAccess.EFCore.Repositories
+namespace DAL.Repositories
 {
     public class ProjectRepository : GenericRepository<Project>, IProjectRepository
     {

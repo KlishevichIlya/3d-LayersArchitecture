@@ -4,14 +4,16 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20210604115106_ManyToMany")]
+    partial class ManyToMany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,17 +86,17 @@ namespace DAL.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("Common.Entities.WorkHistory", b =>
+            modelBuilder.Entity("DeveloperProject", b =>
                 {
-                    b.Property<int>("PreviousDeveloperId")
+                    b.Property<int>("PreviousDevelopersId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PreviousProjectId")
+                    b.Property<int>("PreviousProjectsId")
                         .HasColumnType("int");
 
-                    b.HasKey("PreviousDeveloperId", "PreviousProjectId");
+                    b.HasKey("PreviousDevelopersId", "PreviousProjectsId");
 
-                    b.HasIndex("PreviousProjectId");
+                    b.HasIndex("PreviousProjectsId");
 
                     b.ToTable("WorkHistory");
                 });
@@ -109,35 +111,24 @@ namespace DAL.Migrations
                     b.Navigation("CurrentProject");
                 });
 
-            modelBuilder.Entity("Common.Entities.WorkHistory", b =>
+            modelBuilder.Entity("DeveloperProject", b =>
                 {
-                    b.HasOne("Common.Entities.Developer", "Developer")
-                        .WithMany("PreviousProjects")
-                        .HasForeignKey("PreviousDeveloperId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                    b.HasOne("Common.Entities.Developer", null)
+                        .WithMany()
+                        .HasForeignKey("PreviousDevelopersId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Common.Entities.Project", "Project")
-                        .WithMany("PreviousDevelopers")
-                        .HasForeignKey("PreviousProjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                    b.HasOne("Common.Entities.Project", null)
+                        .WithMany()
+                        .HasForeignKey("PreviousProjectsId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Developer");
-
-                    b.Navigation("Project");
-                });
-
-            modelBuilder.Entity("Common.Entities.Developer", b =>
-                {
-                    b.Navigation("PreviousProjects");
                 });
 
             modelBuilder.Entity("Common.Entities.Project", b =>
                 {
                     b.Navigation("CurrentDevelopers");
-
-                    b.Navigation("PreviousDevelopers");
                 });
 #pragma warning restore 612, 618
         }

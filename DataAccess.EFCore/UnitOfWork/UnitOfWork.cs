@@ -1,5 +1,6 @@
-﻿using DataAccess.EFCore.Repositories;
-using Domain.Interfaces;
+﻿using DAL;
+using DAL.Repositories;
+using DAL.UnitOfWork;
 
 namespace DataAccess.EFCore.UnitOfWork
 {
@@ -12,7 +13,7 @@ namespace DataAccess.EFCore.UnitOfWork
         public UnitOfWork(ApplicationContext context)
         {
             _context = context;
-            Developers = new DeveloperRepository(_context);
+            Developers = new DeveloperRepository(_context); 
             Projects = new ProjectRepository(_context);
         }
 

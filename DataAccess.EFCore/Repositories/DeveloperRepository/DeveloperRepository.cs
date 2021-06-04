@@ -1,9 +1,8 @@
-﻿using Domain.Entities;
-using Domain.Interfaces;
+﻿using Common.Entities;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DataAccess.EFCore.Repositories
+namespace DAL.Repositories
 {
     public class DeveloperRepository : GenericRepository<Developer>, IDeveloperRepository
     {
