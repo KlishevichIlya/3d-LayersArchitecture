@@ -21,7 +21,7 @@ namespace PL.Validators
                 .MaximumLength(160).WithMessage("Lenght of description must be less than 160 symbols.");
 
             RuleFor(u => u.DateOfBirthday)
-                .NotEmpty().WithMessage($"Field DateOfBirthday is required")               
+                .NotEmpty().WithMessage($"Field DateOfBirthday is required")
                 .LessThan(u => u.DateOfStartWorking.AddYears(-18)).WithMessage("Date of Birthday must be less than Date of Start Working");
 
             RuleFor(u => u.DateOfStartWorking)
@@ -31,7 +31,7 @@ namespace PL.Validators
                 .NotEmpty().WithMessage("Name can not be empty")
                 .MaximumLength(50).WithMessage("Name can not be more that 50 symbols.")
                 .MinimumLength(1).WithMessage("Name can not be less than 1 symbols.");
-               
+
         }
     }
 }

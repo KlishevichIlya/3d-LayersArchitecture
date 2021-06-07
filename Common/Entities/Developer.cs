@@ -15,7 +15,7 @@ namespace Common.Entities
         public DateTime DateOfBirthday { get; set; }
         public DateTime DateOfStartWorking { get; set; }
         public int? CurrentProjectId { get; set; }
-        public Project CurrentProject { get; set; }  
+        public Project CurrentProject { get; set; }
         public List<WorkHistory> PreviousProjects { get; set; }
     }
 }

@@ -1,8 +1,5 @@
-﻿using AutoMapper;
-using BLL.Interfaces;
+﻿using BLL.Interfaces;
 using Common.DTO;
-
-using DAL.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -11,13 +8,12 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class DeveloperController : ControllerBase
-    {       
+    {
         private readonly IDeveloperService _developerServices;
-       
 
         public DeveloperController(IDeveloperService developerServices)
         {
-            _developerServices = developerServices;            
+            _developerServices = developerServices;
         }
 
         /// <summary>
@@ -32,7 +28,7 @@ namespace WebApi.Controllers
             var popularDevelopers = _developerServices.GerPopularDevelopers(count);
             return Ok(popularDevelopers);
         }
-        
+
         /// <summary>
         /// Add new developer
         /// </summary>
@@ -49,7 +45,7 @@ namespace WebApi.Controllers
             }
             return BadRequest();
         }
-        
+
         /// <summary>
         /// Delete user
         /// </summary>
@@ -58,12 +54,12 @@ namespace WebApi.Controllers
         [HttpDelete]
         [Route("delete/developer")]
         public IActionResult RemoveCurrentDeveloper(int id)
-        {           
+        {
             var developer = _developerServices.GetById(id);
             if (developer == null)
                 throw new ArgumentException($"User with Id = {id} not found");
             _developerServices.Remove(developer);
-            return Ok();            
+            return Ok();
         }
 
         /// <summary>
@@ -80,6 +76,5 @@ namespace WebApi.Controllers
                 throw new ArgumentException($"User with Id = {id} not found");
             return Ok(developer);
         }
-
     }
 }

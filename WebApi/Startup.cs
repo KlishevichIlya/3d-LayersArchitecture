@@ -1,6 +1,6 @@
+using BLL.Interfaces;
 using BLL.Services;
 using DAL;
-using DAL.Repositories;
 using DAL.UnitOfWork;
 using DataAccess.EFCore.UnitOfWork;
 using FluentValidation.AspNetCore;
@@ -24,7 +24,7 @@ namespace WebApi
 
         public IConfiguration Configuration { get; }
 
-       
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationContext>(options =>
@@ -32,12 +32,13 @@ namespace WebApi
                     Configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(ApplicationContext).Assembly.FullName)));
             services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddTransient<IProjectRepository, ProjectService>();
-            services.AddTransient<IDeveloperRepository, DeveloperService>();
+            services.AddTransient<IProjectService, ProjectService>();
+            services.AddTransient<IDeveloperService, DeveloperService>();
             services.AddAutoMapper(typeof(Startup));
-            services.AddControllers().AddFluentValidation(fv => {                
+            services.AddControllers().AddFluentValidation(fv =>
+            {
                 fv.RegisterValidatorsFromAssemblyContaining<DeveloperDTOValidator>(); // Scoped
-            });          
+            });
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "PL", Version = "v1" }); });
         }
 

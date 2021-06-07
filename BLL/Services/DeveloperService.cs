@@ -6,7 +6,7 @@ using DAL.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Linq;
+
 
 namespace BLL.Services
 {
@@ -19,13 +19,13 @@ namespace BLL.Services
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-        }              
+        }
 
         public void Add(DeveloperDTO developerDTO)
         {
             var developer = _mapper.Map<DeveloperDTO, Developer>(developerDTO);
             _unitOfWork.Developers.Add(developer);
-            _unitOfWork.Complete();            
+            _unitOfWork.Complete();
         }
 
         public void Remove(DeveloperDTO developerDTO)
@@ -37,37 +37,41 @@ namespace BLL.Services
 
         public void AddRange(IEnumerable<DeveloperDTO> developersDTO)
         {
-            var developers = _mapper.Map<DeveloperDTO, Developer>(developersDTO);
+            var developers = _mapper.Map<IEnumerable<DeveloperDTO>, IEnumerable<Developer>>(developersDTO);
             _unitOfWork.Developers.AddRange(developers);
             _unitOfWork.Complete();
         }
 
-        public void RemoveRange(IEnumerable<DeveloperDTO> developers)
+        public void RemoveRange(IEnumerable<DeveloperDTO> developersDTO)
         {
+            var developers = _mapper.Map<IEnumerable<DeveloperDTO>, IEnumerable<Developer>>(developersDTO);
             _unitOfWork.Developers.RemoveRange(developers);
             _unitOfWork.Complete();
         }
 
         public DeveloperDTO GetById(int id)
         {
-            var developer =  _unitOfWork.Developers.GetById(id);
-            return _mapper.Map<Developer, DeveloperDTO>(developer);            
+            var developer = _unitOfWork.Developers.GetById(id);
+            return _mapper.Map<Developer, DeveloperDTO>(developer);
         }
 
         public IEnumerable<DeveloperDTO> GetAll()
         {
             var developers = _unitOfWork.Developers.GetAll();
-            return _mapper.Map<Developer, DeveloperDTO>(developers);
+            return _mapper.Map<IEnumerable<Developer>, IEnumerable<DeveloperDTO>>(developers);
         }
 
-        public IEnumerable<DeveloperDTO> Find(Expression<Func<DeveloperDTO, bool>> expression)
+        public IEnumerable<DeveloperDTO> Find(Expression<Func<DeveloperDTO, bool>> expressionDTO)
         {
-            return _unitOfWork.Developers.Find(expression);
+            var expression = _mapper.Map<Expression<Func<DeveloperDTO, bool>>, Expression<Func<Developer, bool>>>(expressionDTO);
+            var developers = _unitOfWork.Developers.Find(expression);
+            return _mapper.Map<IEnumerable<Developer>, IEnumerable<DeveloperDTO>>(developers);
         }
 
         public IEnumerable<DeveloperDTO> GerPopularDevelopers(int count)
         {
-            return _unitOfWork.Developers.GerPopularDevelopers(count);
+            var developers = _unitOfWork.Developers.GerPopularDevelopers(count);
+            return _mapper.Map<IEnumerable<Developer>, IEnumerable<DeveloperDTO>>(developers);
         }
     }
 }

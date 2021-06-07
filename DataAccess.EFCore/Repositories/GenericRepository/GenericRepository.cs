@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace DAL.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class                                                                  
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         protected readonly ApplicationContext Context;
 

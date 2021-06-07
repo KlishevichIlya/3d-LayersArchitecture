@@ -13,7 +13,7 @@ namespace DataAccess.EFCore.UnitOfWork
         public UnitOfWork(ApplicationContext context)
         {
             _context = context;
-            Developers = new DeveloperRepository(_context); 
+            Developers = new DeveloperRepository(_context);
             Projects = new ProjectRepository(_context);
         }
 

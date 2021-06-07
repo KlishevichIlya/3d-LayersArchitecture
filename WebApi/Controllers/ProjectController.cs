@@ -1,7 +1,5 @@
-﻿using AutoMapper;
+﻿using BLL.Interfaces;
 using Common.DTO;
-using Common.Entities;
-using DAL.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -11,15 +9,12 @@ namespace PL.Controllers
     [ApiController]
     public class ProjectController : Controller
     {
-        private readonly IProjectRepository _projectRepository;
-        private readonly IMapper _mapper;
+        private readonly IProjectService _projectService;
 
-        public ProjectController(IProjectRepository projectRepository, IMapper mapper)
+        public ProjectController(IProjectService projectService)
         {
-            _projectRepository = projectRepository;
-            _mapper = mapper;
+            _projectService = projectService;
         }
-
 
         /// <summary>
         /// Add new project
@@ -32,9 +27,8 @@ namespace PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var project = _mapper.Map<ProjectDTO, Project>(projectDTO);
-                _projectRepository.Add(project);
-                return Ok(project);
+                _projectService.Add(projectDTO);
+                return Ok(projectDTO);
             }
             return BadRequest();
         }
@@ -48,10 +42,10 @@ namespace PL.Controllers
         [Route("/delete/project")]
         public IActionResult DeleteProject(int id)
         {
-            var project = _projectRepository.GetById(id);
+            var project = _projectService.GetById(id);
             if (project == null)
                 throw new ArgumentException($"Project with Id = {id} not found");
-            _projectRepository.Remove(project);
+            _projectService.Remove(project);
             return Ok();
         }
 
@@ -64,7 +58,7 @@ namespace PL.Controllers
         [Route("/get/project/{id}")]
         public IActionResult GetProjectById(int id)
         {
-            var project = _projectRepository.GetById(id);
+            var project = _projectService.GetById(id);
             if (project == null)
                 throw new ArgumentException($"Project with Id = {id} not found");
             return Ok(project);

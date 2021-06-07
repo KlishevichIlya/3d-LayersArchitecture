@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Common.Entities;
+using System;
 using System.Collections.Generic;
-using Common.Entities;
 
 namespace Common.DTO
 {

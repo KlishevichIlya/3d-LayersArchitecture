@@ -14,12 +14,12 @@ namespace DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-           
-           modelBuilder.Entity<Developer>()
-                .HasOne(u => u.CurrentProject)
-                .WithMany(u => u.CurrentDevelopers)
-                .OnDelete(DeleteBehavior.SetNull)
-                    .HasForeignKey(p => p.CurrentProjectId);
+
+            modelBuilder.Entity<Developer>()
+                 .HasOne(u => u.CurrentProject)
+                 .WithMany(u => u.CurrentDevelopers)
+                 .OnDelete(DeleteBehavior.SetNull)
+                     .HasForeignKey(p => p.CurrentProjectId);
 
             modelBuilder.Entity<WorkHistory>()
                     .HasKey(u => new { u.PreviousDeveloperId, u.PreviousProjectId });

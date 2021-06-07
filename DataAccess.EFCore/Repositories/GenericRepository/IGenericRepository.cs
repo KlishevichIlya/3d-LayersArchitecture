@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace DAL.Repositories
 {
-    public interface IGenericRepository<T> where T : class                                             
+    public interface IGenericRepository<T> where T : class
     {
         T GetById(int id);
         IEnumerable<T> GetAll();
